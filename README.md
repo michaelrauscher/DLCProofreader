@@ -1,4 +1,4 @@
-![DLCProofreader screenshot](DLCProofreaderEx.png)
+![DLCProofreader screenshot](DLCProofreaderEx.PNG)
 
 DLCProofreader is a standalone MATLAB program for revising and annotating tracking data generated with [DeepLabCut.](https://github.com/DeepLabCut/DeepLabCut)
 
