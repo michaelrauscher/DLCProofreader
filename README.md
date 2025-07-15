@@ -1,3 +1,5 @@
+![DLCProofreader screenshot](DLCProofreaderEx.png)
+
 DLCProofreader is a standalone MATLAB program for revising and annotating tracking data generated with [DeepLabCut.](https://github.com/DeepLabCut/DeepLabCut)
 
 This "proofreading" step can be helpful for validating good tracking and correcting / conditioning data with poor tracking in a small proportion of frames. The program also allows for an independent skeleton visualization (separate from the one included in a DLC network's config file), joint angle measurements relative to tracked or static points in the image, and manual definition and annotation of video events.
