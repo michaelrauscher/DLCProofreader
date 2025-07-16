@@ -1,3 +1,5 @@
+%Michael Rauscher 2025
+
 function DLCProofreader()
 badlinthresh = .95;
 
@@ -1920,8 +1922,12 @@ autosavechk.Value = autorestore;%set this after a first file load so we don't tr
         switch h
             case {editsel,fixedsel,segsel,axissel}
                 idx = h == toggles;
-                set(toggles(idx),'Value',0,'BackgroundColor',[173,216,230]./255);
-                set(toggles(~idx),'Value',1,'BackgroundColor',[0.96 0.96 0.96]);
+                set(toggles(idx),'Value',0,'BackgroundColor',[173,216,230]./255,'FontColor','k');
+                if strcmp(themecol,'k')
+                    set(toggles(~idx),'Value',1,'BackgroundColor',[0.96 0.96 0.96],'FontColor',themecol);                    
+                else
+                    set(toggles(~idx),'Value',1,'BackgroundColor',[0 0 0],'FontColor',themecol);
+                end
                 if h==editsel
                     addskelbtn.Text = 'Update';
                     remskelbtn.Text = 'Revert Changes';                   
@@ -2263,22 +2269,22 @@ autosavechk.Value = autorestore;%set this after a first file load so we don't tr
     
     function buttons(h,e)
         switch h
-            case f
-                if ~strcmp(e.EventName,'WindowScrollWheel');return;end
-                if isempty(ptstree.SelectedNodes);return;end                
-                idx = find(ptstree.SelectedNodes == ptnodes);
-                if ~isempty(idx)                    
-                    idx = idx+e.VerticalScrollCount;
-                    if idx>length(ptnodes)
-                        idx = 1;
-                    elseif idx<1
-                        idx = length(ptnodes);
-                    end
-                    ptstree.SelectedNodes = ptnodes(idx);
-                    n = struct;
-                    n.EventName = 'SelectionChanged';
-                    nodecb(ptstree,n);
-                end
+            % case f
+            %     if ~strcmp(e.EventName,'WindowScrollWheel');return;end
+            %     if isempty(ptstree.SelectedNodes);return;end                
+            %     idx = find(ptstree.SelectedNodes == ptnodes);
+            %     if ~isempty(idx)                    
+            %         idx = idx+e.VerticalScrollCount;
+            %         if idx>length(ptnodes)
+            %             idx = 1;
+            %         elseif idx<1
+            %             idx = length(ptnodes);
+            %         end
+            %         ptstree.SelectedNodes = ptnodes(idx);
+            %         n = struct;
+            %         n.EventName = 'SelectionChanged';
+            %         nodecb(ptstree,n);
+            %     end
             case {vidim,hcirc}               
                 if isRunning;return;end
                 if any(ismember(ptnodes,ptstree.SelectedNodes))
