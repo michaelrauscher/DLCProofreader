@@ -188,7 +188,7 @@ atab = [];
 %Tab for point/skeleton/event configuration
 skeltab = uitab(tabgp,"Title","Skeleton and Event Markers");
 
-editsel = uibutton(skeltab,"State",'Text','Edit Selected','ValueChangedFcn',@skelcb,'FontSize',15,'BackgroundColor',[173,216,230]./255);
+editsel = uibutton(skeltab,"State",'Text','Edit Selected','ValueChangedFcn',@skelcb,'FontSize',15,'BackgroundColor',[173,216,230]./255,'FontColor','k');
 fixedsel = uibutton(skeltab,"State",'Text','Fixed Point','ValueChangedFcn',@skelcb,'FontSize',15,'Value',1);
 segsel = uibutton(skeltab,"State",'Text','Line Segment','ValueChangedFcn',@skelcb,'FontSize',15,'Value',1);
 axissel = uibutton(skeltab,"State",'Text','Axis Line','ValueChangedFcn',@skelcb,'FontSize',15,'Value',1);
@@ -300,13 +300,13 @@ yyaxis(zoomax,'right');
 goodbadlns=plot(zoomax,nan,nan,':','Color',[100 212 19]./255);%good (manually corrected)
 goodbadlns=[goodbadlns; plot(zoomax,nan,nan,':','Color',[1 0.6 0.6])];%bad (likelihood<badlinthresh)
 ylim(zoomax,[0 1]);
-zselrgn = area(zoomax,[nan nan],[1 1],'FaceColor',[0 0 0],'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons);
+zselrgn = area(zoomax,[nan nan],[1 1],'FaceColor',themecol,'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons);
 
 yyaxis(datax,'right');
 goodbadlns=[goodbadlns; plot(datax,nan,nan,':','Color',[100 212 19]./255)];%good (manually corrected)
 goodbadlns=[goodbadlns; plot(datax,nan,nan,':','Color',[1 0.6 0.6])];%bad (likelihood<badlinthresh)
 ylim(datax,[0 1]);
-dselrgn = area(datax,[nan nan],[1 1],'FaceColor',[0 0 0],'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons);
+dselrgn = area(datax,[nan nan],[1 1],'FaceColor',themecol,'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons);
 
 goodbadrgn=area(zoomax,0,nan,'FaceColor',[100 212 19]./255,'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons);%good (manually corrected)
 goodbadrgn=[goodbadrgn; area(zoomax,0,nan,'FaceColor',[1 .6 .6],'FaceAlpha',.3,'EdgeColor','none','ButtonDownFcn',@buttons)];%bad (likelihood<badlinthresh)
@@ -2585,14 +2585,25 @@ autosavechk.Value = autorestore;%set this after a first file load so we don't tr
                 zanglin(six).YData = wrapTo360(zanglin(six).YData);
                 danglin(six).YData = wrapTo360(danglin(six).YData);
                 updatetablines;
-            case {zoomax datax,zselrgn,dselrgn,goodbadlns,goodbadrgn}
-                val=round(e.IntersectionPoint(1));
-                setframe(val);
-                lim = dselrgn.XData;
-                if all(~isnan(lim)) && (val<lim(1) || val>lim(2))
+            case {zoomax,datax,zselrgn,dselrgn,goodbadlns,goodbadrgn}
+                if e.Button == 2
                     dselrgn.XData = [nan nan];
                     zselrgn.XData = [nan nan];
+                else
+                    lfix = fix;
+                    val=round(e.IntersectionPoint(1));
+                    setframe(val);
+                    if e.Button == 3 && lfix ~= fix
+                        lim = sort([lfix fix]);
+                        dselrgn.XData = lim;
+                        zselrgn.XData = lim;
+                    end
                 end
+                % lim = dselrgn.XData;
+                % if all(~isnan(lim)) && (val<lim(1) || val>lim(2))
+                %     dselrgn.XData = [nan nan];
+                %     zselrgn.XData = [nan nan];
+                % end
             case progax
                 if isempty(ftab);return;end
                 val = e.IntersectionPoint(1);
